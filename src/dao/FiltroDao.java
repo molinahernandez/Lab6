@@ -5,7 +5,7 @@
  */
 package dao;
 
-import com.sun.istack.internal.logging.Logger;
+//import com.sun.istack.internal.logging.Logger;
 import conexion.conexion;
 import interfaces.metodos;
 import java.sql.PreparedStatement;
@@ -15,7 +15,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import modelo.filtro;
-
+import java.util.logging.Logger;
 /**
  *
  * @author Cristian Hernandez

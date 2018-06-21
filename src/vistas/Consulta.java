@@ -7,12 +7,15 @@ package vistas;
 
 import dao.FiltroDao;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -46,8 +49,8 @@ public class Consulta extends JFrame {
     public Consulta() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
-        aregarLabels();
-        formulario();
+        agregarLabels();
+        Formulario();
         llenarTabla();
         Container container = getContentPane();
         container.add(lblCodigo);
@@ -121,6 +124,7 @@ public class Consulta extends JFrame {
 
     public void llenarTabla() {
         tm = new DefaultTableModel() {
+            @Override
             public Class<?> getColumnClass(int column) {
                 switch (column) {
                     case 0:
@@ -149,13 +153,105 @@ public class Consulta extends JFrame {
     
     public void eventos() {
         insertar.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e){
                 FiltroDao fd = new FiltroDao();
-                filtro f = new filtro(codigo.getText(), marca.SelectedItem().toString(),
-                Integer.parseInt(stock.getText()), true);
+                filtro f = new filtro(codigo.getText(), marca.getSelectedItem().toString(),
+                        Integer.parseInt(stock.getText()), true);
                 
+                if(no.isSelected()){
+                    f.setExistencia(false);
+                }
+                
+                if(fd.create(f)){
+                    JOptionPane.showMessageDialog(null, "Filtro registrado con exito");
+                    limpiarCampos();
+                    llenarTabla();
+                }else{
+                    JOptionPane.showMessageDialog(null, "Ocurrio un problema al momento de crear el filtro");
+                    
+                }
+            }
+        });
+        
+        actualizar.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FiltroDao fd = new FiltroDao();
+                filtro f = new filtro(codigo.getText(), marca.getSelectedItem().toString(),
+                        Integer.parseInt(stock.getText()), true);
+                
+                if(no.isSelected()){
+                    f.setExistencia(false);
+                }
+                if(fd.update(f)){
+                    JOptionPane.showMessageDialog(null,  "Filtro modificado con exito");
+                    limpiarCampos();
+                    llenarTabla();
+                }else{
+                    JOptionPane.showMessageDialog(null, "Ocurrio un problema al momento de modificar el filtro");
+                }
+            }
+            
+        });
+        
+        eliminar.addActionListener(new ActionListener(){ 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              FiltroDao fd = new FiltroDao();
+              if(fd.delete(codigo.getText())){
+                  JOptionPane.showMessageDialog(null, "Filtro eliminado con exito");
+                  limpiarCampos();
+                  llenarTabla();
+              }else{
+                  JOptionPane.showMessageDialog(null, "Ocurrio un problema al momento de eliminar el filtro");
+              }
+            }
+            
+        });
+        
+        buscar.addActionListener(new ActionListener() { 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FiltroDao fd = new FiltroDao();
+                filtro f = fd.read(codigo.getText());
+                if (f== null){
+                    JOptionPane.showMessageDialog(null, "El fitro buscado no se ah encontrado");
+                    
+                }else{
+                    codigo.setText(f.getCodigo());
+                    marca.setSelectedItem(f.getMarca());
+                    stock.setText(Integer.toString(f.getStock()));
+                    
+                    if (f.getExistencia()){
+                        si.setSelected(true);
+                    }else{
+                        no.setSelected(true);
+                    }
+                }
+            } 
+        });
+        
+        limpiar.addActionListener(new ActionListener(){ 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                limpiarCampos(); 
+            }    
+        });
+    }
+    
+    public void limpiarCampos(){
+        codigo.setText("");
+        marca.setSelectedItem("FRAM");
+        stock.setText("");
+    }
+    
+    public static void main (String[] args){
+        java.awt.EventQueue.invokeLater(new Runnable() { 
+            @Override
+            public void run() {
+                new Consulta().setVisible(true);
             }
         });
     }
-
 }
