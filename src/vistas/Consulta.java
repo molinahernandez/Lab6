@@ -74,9 +74,9 @@ public class Consulta extends JFrame {
 
     public final void agregarLabels() {
         lblCodigo = new JLabel("Codigo");
-        lblCodigo = new JLabel("Marca");
-        lblCodigo = new JLabel("Stock");
-        lblCodigo = new JLabel("Stock en la tienda");
+        lblMarca = new JLabel("Marca");
+        lblStock = new JLabel("Stock");
+        lblExistencia = new JLabel("Stock en la tienda");
         lblCodigo.setBounds(10, 10, ANCHOC, ALTOC);
         lblMarca.setBounds(10, 60, ANCHOC, ALTOC);
         lblStock.setBounds(10, 100, ANCHOC, ALTOC);

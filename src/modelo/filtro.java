@@ -73,15 +73,12 @@ public class filtro {
         this.stock = stock;
     }
 
-    public boolean isExistencia() {
-        return existencia;
-    }
 
     public void setExistencia(boolean existencia) {
         this.existencia = existencia;
     }
 
     public boolean getExistencia() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return existencia;
     }
 }
